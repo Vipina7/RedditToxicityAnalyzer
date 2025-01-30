@@ -1,6 +1,7 @@
 import os
 import sys
 import pandas as pd
+from src.components.data_transformation import DataTransformation, DataTransformationConfig
 from src.exception import CustomException
 from src.logger import logging
 
@@ -65,4 +66,7 @@ class DataIngestion:
         
 if __name__ == "__main__":
     obj = DataIngestion()
-    obj.initiate_data_ingestion()
+    train_path, test_path = obj.initiate_data_ingestion()
+
+    transform_obj = DataTransformation()
+    transform_obj.initiate_data_transformation(train_path=train_path, test_path=test_path)
