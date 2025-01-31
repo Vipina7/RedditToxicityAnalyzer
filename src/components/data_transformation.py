@@ -15,7 +15,7 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 @dataclass
 class DataTransformationConfig():
-    fasttext_file_path = os.path.join('artifacts', 'fasttest.pkl')
+    fasttext_file_path = os.path.join('artifacts', 'fasttext.pkl')
 
 class DataTransformation:
     def __init__(self):
@@ -25,7 +25,7 @@ class DataTransformation:
         try:
             """This builds the FastText model for vectorizing"""
 
-            fasttext_model = FastText(sentences=corpus, vector_size=300, window=5, min_count=1)
+            fasttext_model = FastText(sentences=corpus, vector_size=400, window=5, min_count=1)
 
             return fasttext_model
         
@@ -48,15 +48,13 @@ class DataTransformation:
             logging.info('Obtaining vectorizing model')
             vectorize_obj = self.get_vectorization_object(corpus=corpus)
 
-            X_train = train_df['body'].apply(lambda x: vectorize_text(x, vectorize_obj, embedding_dim=300))
-            X_train = pad_sequences(X_train, maxlen = 50, padding = 'post', truncating = 'post', dtype = 'float32')
-            X_train = np.array(X_train)
+            X_train = np.vstack(train_df['body'].apply(lambda x: vectorize_text(x, vectorize_obj, embedding_dim=400)))
+            X_train = X_train.reshape(X_train.shape[0],1,X_train.shape[1])
             y_train = train_df['controversiality']
             
-            X_test = test_df['body'].apply(lambda x: vectorize_text(x, vectorize_obj, embedding_dim=300))
-            X_test = pad_sequences(X_test, maxlen = 50, padding = 'post', truncating = 'post', dtype = 'float32')
-            X_test = np.array(X_test)
-            y_test = np.array(test_df['controversiality'])
+            X_test = np.vstack(test_df['body'].apply(lambda x: vectorize_text(x, vectorize_obj, embedding_dim=400)))
+            X_test = X_test.reshape(X_test.shape[0],1,X_test.shape[1])
+            y_test = test_df['controversiality']
             logging.info("Vectorizing the train and test data complete")
 
             logging.info("Saving the word2vec model")
@@ -71,3 +69,4 @@ class DataTransformation:
 
         except Exception as e:
             raise CustomException(e, sys)
+        

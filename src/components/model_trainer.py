@@ -2,6 +2,7 @@ import os
 import sys
 from src.exception import CustomException
 from src.logger import logging
+from src.utils import save_h5_file
 import logging
 
 from dataclasses import dataclass
@@ -14,7 +15,7 @@ from tensorflow.keras.callbacks import EarlyStopping
 @dataclass
 class ModelTrainerConfig:
     def __init__(self):
-        self.trained_model_path = os.path.join('artifacts','model.h5')
+        self.trained_model_path = os.path.join('artifacts','GRU_model.h5')
 
 class ModelTrainer:
     def __init__(self):
@@ -27,8 +28,10 @@ class ModelTrainer:
 
             logging.info("Initializing the model")
             model = Sequential()
-            model.add(GRU(64, return_sequences = False, input_shape = (50,300)))
+            model.add(GRU(64, return_sequences = True, input_shape = (1,400)))
+            model.add(GRU(32))
             model.add(Dropout(0.2))
+            model.add(Dense(64, activation = 'relu'))
             model.add(Dense(1, activation = 'sigmoid'))
 
             model.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
@@ -36,7 +39,7 @@ class ModelTrainer:
 
             early_stopping = EarlyStopping(
                 monitor = 'val_loss',
-                patience = 5,
+                patience = 10,
                 restore_best_weights = True)
             logging.info("Early Stopping defined")
 
@@ -45,7 +48,7 @@ class ModelTrainer:
             )
             logging.info("Model training complete")
 
-            model.save('artifacts/gru_model.h5')
+            save_h5_file(filepath=self.model_trainer_config.trained_model_path, obj=model)
             logging.info("Save model successful")
 
             prediction = model.predict(X_test)

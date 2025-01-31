@@ -27,9 +27,9 @@ def vectorize_text(sentence, vector_model, embedding_dim):
             words = str(sentence).split()
             valid_words = [vector_model.wv[word] for word in words if word in vector_model.wv]
             if valid_words:
-                return np.array(valid_words)
+                return np.mean(valid_words, axis = 0)
             else:
-                return np.zeros((1,embedding_dim))
+                return np.zeros(embedding_dim)
         
         except Exception as e:
             raise CustomException(e, sys)
@@ -52,3 +52,21 @@ def save_object(file_path, obj):
 
     except Exception as e:
          raise CustomException(e, sys)
+    
+def save_h5_file(filepath, obj):
+    try:
+        obj.save(filepath)
+        logging.info('Saved the GRU model successfully')
+    except Exception as e:
+        raise CustomException(e, sys)
+
+    
+def load_object(file_path):
+     try:
+        with open(file_path, 'rb') as file_obj:
+            model = dill.load(file_obj)
+        logging.info("Successfully installed fasttext model")
+        return model
+
+     except Exception as e:
+          raise CustomException(e, sys)
