@@ -7,30 +7,29 @@ ToxiScan is a Streamlit-based web application designed to predict the toxicity l
 ## Project Structure
 The project is organized as follows:
 
+```text
 Reddit-Toxicity-Evaluation/
-|
-|-- src/
-| |-- components/
-| | |-- data_ingestion.py # Loads/processes raw Reddit comment data
-| | |-- data_transformation.py# Handles text preprocessing & FastText embeddings
-| | |-- model_trainer.py # Trains/validates GRU model
-| | -- predict_pipeline.py # Manages inference pipeline 
-| |
-| |-- utils.py # Text cleaning/vectorization utilities
-| |-- exception.py # Custom error handling
-| |-- logger.py # Logging configuration
-|
-|-- artifacts/ # Saved models/preprocessed data
-|-- notebooks/ # Jupyter notebooks for EDA/model prototyping
-|-- app.py # Main Streamlit application
-|-- requirements.txt # Python dependencies
-|-- README.md # Project documentation
-|
--- data/ |-- kaggle_RC_2019-05.csv
-
-
----
-
+│
+├── src/
+│   ├── components/
+│   │   ├── data_ingestion.py       # Loads/processes raw Reddit comment data
+│   │   ├── data_transformation.py  # Handles text preprocessing & FastText embeddings
+│   │   ├── model_trainer.py        # Trains/validates GRU model
+│   │   └── predict_pipeline.py     # Manages inference pipeline
+│   │
+│   ├── utils.py                    # Text cleaning/vectorization utilities
+│   ├── exception.py                # Custom error handling
+│   └── logger.py                   # Logging configuration
+│
+├── artifacts/                      # Saved models/preprocessed data
+├── notebooks/                      # Jupyter notebooks for EDA/model prototyping
+├── app.py                          # Main Streamlit application
+├── requirements.txt                # Python dependencies
+├── README.md                       # Project documentation
+│
+└── data/
+    └── kaggle_RC_2019-05.csv       # Raw dataset
+```
 ## Dataset
 The model was trained on a sample(100k) from Kaggle dataset containing 1M+ Reddit comments with metadata.  
 **Key Attributes**:
@@ -102,5 +101,5 @@ The model was trained on a sample(100k) from Kaggle dataset containing 1M+ Reddi
 
 **Running the Application**
 To start the Flask app, run:
-streamlit run app.py
-This will launch the application on http://127.0.0.1:5000. You can use the web interface to input data and see predictions.
+- streamlit run app.py
+- This will launch the application on http://127.0.0.1:5000. You can use the web interface to input data and see predictions.
