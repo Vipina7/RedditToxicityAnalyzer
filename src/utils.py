@@ -5,6 +5,7 @@ import dill
 import gdown
 import sys
 import os
+import lxml
 from bs4 import BeautifulSoup
 from src.exception import CustomException
 from src.logger import logging
@@ -12,23 +13,23 @@ from src.logger import logging
 def preprocess_text(sentence):
     try:
         sentence = str(sentence).lower()
-        sentence = re.sub('[^a-zA-z0-9]','',sentence)
+        sentence = re.sub('[^a-zA-z0-9]',' ',sentence)
         sentence = re.sub(r'(http|https|ftp|ssh)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?','',sentence)
-        sentence = BeautifulSoup(sentence,'html.parser').get_text()
+        sentence = BeautifulSoup(sentence,'lxml').get_text()
 
         return sentence
     
     except Exception as e:
          raise CustomException(e, sys)
 
-def vectorize_text(sentence, word2vec_model, embedding_dim):
+def vectorize_text(sentence, vector_model, embedding_dim):
         try:
             words = str(sentence).split()
-            valid_words = [word2vec_model[word] for word in words if word in word2vec_model]
+            valid_words = [vector_model.wv[word] for word in words if word in vector_model.wv]
             if valid_words:
-                return np.mean(valid_words, axis=0)
+                return np.array(valid_words)
             else:
-                return np.zeros(embedding_dim)
+                return np.zeros((1,embedding_dim))
         
         except Exception as e:
             raise CustomException(e, sys)
