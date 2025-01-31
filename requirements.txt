@@ -15,4 +15,4 @@ dill
 bs4
 gdown
 lxml
-# -e .
+-e .

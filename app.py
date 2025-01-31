@@ -26,7 +26,7 @@ if st.button("Evaluate Toxicity"):
             if prediction > 40:
                 st.write(f"The content is likely **toxic** with a toxicity level of {prediction}%. Please review carefully.")
             else:
-                st.write(f"The content appears to be **non-toxic** with a toxicity level of {prediction}%.")
+                st.write(f"The content appears to have a toxicity level of {prediction}%.")
         
         except Exception as e:
             st.error(f"Error occured: {str(e)}")
