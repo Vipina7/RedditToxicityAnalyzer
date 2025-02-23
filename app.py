@@ -4,7 +4,6 @@ import numpy as np
 
 from src.pipeline.predict_pipeline import PredictPipeline
 from src.exception import CustomException
-from tensorflow.keras.models import load_model
 import gensim
 
 st.title('Reddit Toxicity Evaluation App')
